@@ -29,25 +29,25 @@ function Carousel({ photos, title }) {
   function goBackward() {
     setCurrCardIdx(currCardIdx - 1);
   }
-
+  //TODO: add hidden expressions outside of return statement
   return (
     <div className="Carousel">
       <h1>{title}</h1>
       <div className="Carousel-main">
-        <i
+        {currCardIdx > 0 && <i
           className="bi bi-arrow-left-circle"
           onClick={goBackward}
-        />
+        />}
         <Card
           caption={currCard.caption}
           src={currCard.src}
           currNum={currCardIdx + 1}
           totalNum={total}
         />
-        <i
+        {currCardIdx < photos.length-1 && <i
           className="bi bi-arrow-right-circle"
           onClick={goForward}
-        />
+        />}
       </div>
     </div>
   );

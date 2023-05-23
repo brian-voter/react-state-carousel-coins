@@ -14,10 +14,11 @@ it("carousel smoke test", function () {
 
 it("carousel snapshot", function () {
   // this is a low-value test, but better than nothing
-  const { container } = render(<Carousel
+  const { container, debug } = render(<Carousel
     photos={TEST_IMAGES}
     title="images for testing"
   />);
+  debug(container);
 
   expect(container).toMatchSnapshot();
 });
@@ -58,13 +59,6 @@ it("works when you click on the left arrow", function () {
       title="images for testing"
     />
   );
-  // expect the first image to show, but not the second
-  expect(
-    container.querySelector('img[alt="testing image 1"]')
-  ).toBeInTheDocument();
-  expect(
-    container.querySelector('img[alt="testing image 2"]')
-  ).not.toBeInTheDocument();
 
   // move forward in the carousel
   const rightArrow = container.querySelector(".bi-arrow-right-circle");
@@ -82,4 +76,45 @@ it("works when you click on the left arrow", function () {
   expect(
     container.querySelector('img[alt="testing image 1"]')
   ).toBeInTheDocument();
+});
+
+it("left arrow is not clickable when on the first image", function () {
+  const { container } = render(
+    <Carousel
+      photos={TEST_IMAGES}
+      title="images for testing"
+    />
+  );
+
+  // left arrow should not be in the document
+  expect(
+    container.querySelector(".bi-arrow-left-circle")
+  ).not.toBeInTheDocument();
+});
+
+it("right arrow is not clickable when on the third image", function () {
+  const { container } = render(
+    <Carousel
+      photos={TEST_IMAGES}
+      title="images for testing"
+    />
+  );
+
+  // move forward in the carousel
+  const rightArrow = container.querySelector(".bi-arrow-right-circle");
+  fireEvent.click(rightArrow);
+  fireEvent.click(rightArrow);
+
+  // expect the third image to show, but not the second
+  expect(
+    container.querySelector('img[alt="testing image 2"]')
+  ).not.toBeInTheDocument();
+  expect(
+    container.querySelector('img[alt="testing image 3"]')
+  ).toBeInTheDocument();
+
+  // right arrow should not be in the document
+  expect(
+    container.querySelector(".bi-arrow-right-circle")
+  ).not.toBeInTheDocument();
 });
